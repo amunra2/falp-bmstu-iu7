@@ -24,7 +24,7 @@
 \textbf{Условие:} написать функцию, вычисляющую объем параллелепипеда по 3-м его сторонам, и составить диаграмму ее вычисления.
 
 \begin{lstlisting}
-	(defun volume (a b c) (* a (* b c)))
+	(defun volume (a b c) (* a b c)))
 	; (volume 4 4 4) -> 64
 \end{lstlisting}
 
@@ -112,7 +112,7 @@
 
 \textbf{Условие:} написать функцию, которая переводит температуру в системе Фаренгейта температуру по Цельсию \texttt{(defun f-to-c (temp)...)}. 
 
-Формулы: $c = \frac{5}{9} \cdot (f -- 32.0)$; $f= \frac{9}{5} \cdot c + 32.0$. 
+Формулы: $c = \frac{5}{9} \cdot (f - 32.0)$; $f= \frac{9}{5} \cdot c + 32.0$. 
 
 Как бы назывался роман Р.Брэдбери <<+451 по Фаренгейту>> в системе по Цельсию?
 
@@ -121,7 +121,7 @@
 	; (f-to-c 451) -> 232.77779
 \end{lstlisting}
 
-Роман бы назывался <<+232 по Цельсию>>.
+Роман бы назывался <<+232.78 по Цельсию>>.
 
 
 \section{Задание 9}
@@ -131,7 +131,7 @@
 \begin{lstlisting}
 	(list 'cons t nil) ; (CONS T NIL)
 	(eval (list 'cons t NIL)) ; (T)
-	(eval (eval (list 'cons t NIL))) ; The function COMMON-LISP:T is undefined.
+	(eval (eval (list 'cons t NIL))) ; T is undefined.
 	(apply #cons ''(t NIL)) ; illegal complex number format: #CONS
 	; Fix: (apply #'cons '(t NIL)) -> (T)
 	(eval Nil) ; Nil
@@ -157,8 +157,8 @@
 \textbf{Условие:} Написать функцию, вычисляющую площадь трапеции по ее основаниям и высоте, и составить диаграмму ее вычисления.
 
 \begin{lstlisting}
-	(defun trap\_square (a b h) (* (+ a b) 1/2 h))
-	; (trap\_square 2 3 1) -> 2.5
+	(defun trap_square (a b h) (* (+ a b) 1/2 h))
+	; (trap_square 2 3 1) -> 2.5
 \end{lstlisting}
 
 Диаграмма приложена к отчету.
