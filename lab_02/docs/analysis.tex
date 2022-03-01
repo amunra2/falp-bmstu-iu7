@@ -79,8 +79,7 @@
 \begin{lstlisting}
 	(cons 3 (list 5 6)) ; (3 5 6)
 
-	(list 3 'from 9 'lives (-9 3)) ; illegal function call
-	; Fix: (list 3 'from 9 'lives '(-9 3)) -> (3 FROM 9 LIVES (-9 3))
+	(list 3 'from 9 'lives (- 9 3)) ; (3 FROM 9 LIVES 6)
 
 	(+ (length for 2 too))(car '(21 22 23))) ; The variable FOR is unbound.
 	; Fix: (+ (length '(for 2 too))(car '(21 22 23))) ; 24
@@ -158,8 +157,8 @@
 \textbf{Условие:} Написать функцию, вычисляющую площадь трапеции по ее основаниям и высоте, и составить диаграмму ее вычисления.
 
 \begin{lstlisting}
-	(defun trap\_square (a b h) (* (/ (+ a b) 2) h))
-	; (trap\_square 2 3 1) -> 5/2
+	(defun trap\_square (a b h) (* (+ a b) 1/2 h))
+	; (trap\_square 2 3 1) -> 2.5
 \end{lstlisting}
 
 Диаграмма приложена к отчету.
@@ -273,7 +272,7 @@ Lambda-вызов функции:
 
 \begin{lstlisting}[language=Lisp]
 (list 'a 'b)    ; (A B)
-(cons 'a 'b 'c) ; (A B C)
+(list 'a 'b 'c) ; (A B C)
 \end{lstlisting}
 
 \imgHeight{40mm}{memory_list}{Результат работы (list(A B))}

@@ -54,8 +54,7 @@
 
 (cons 3 (list 5 6)) ; (3 5 6)
 
-(list 3 'from 9 'lives (-9 3)) ; illegal function call
-; Fix: (list 3 'from 9 'lives '(-9 3)) -> (3 FROM 9 LIVES (-9 3))
+(list 3 'from 9 'lives (- 9 3)) ; (3 FROM 9 LIVES 6)
 
 (+ (length for 2 too))(car '(21 22 23))) ; The variable FOR is unbound.
 ; Fix: (+ (length '(for 2 too))(car '(21 22 23))) ; 24
@@ -115,5 +114,5 @@
 ; Написать функцию, вычисляющую площадь трапеции по ее основаниям и высоте,
 ; и составить диаграмму ее вычисления.
 
-(defun trap_square (a b h) (* (/ (+ a b) 2) h))
-; (trap_square 2 3 1) -> 5/2
+(defun trap_square (a b h) (* (+ a b) 1/2 h))
+; (trap_square 2 3 1) -> 2.5
