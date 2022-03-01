@@ -1,0 +1,230 @@
+\chapter{Практические задания}
+
+\section{Задание 1}
+
+\textbf{Условие:} написать функцию, которая принимает целое число и возвращает первое четное число, не меньшее аргумента.
+
+\begin{lstlisting}
+	(defun find_even (num) (if (evenp num) num (+ num 1)))
+	; (find_even 5) -> 6
+	; (find_even 6) -> 6
+\end{lstlisting}
+
+
+\section{Задание 2}
+
+\textbf{Условие:} написать функцию, которая принимает число и возвращает число того же знака, но с модулем на 1 больше модуля аргумента.
+
+\begin{lstlisting}
+	(defun inc_module (num) (if (< num 0) (- num 1) (+ num 1)))
+	; (inc_module 5)  -> 6
+	; (inc_module -5) -> -6
+	; (inc_module 0)  -> 1
+\end{lstlisting}
+
+
+\section{Задание 3}
+
+\textbf{Условие:} написать функцию, которая принимает два числа и возвращаетсписок из этих чисел, расположенный по возрастанию.
+
+
+\begin{lstlisting}
+	(defun mini_sort (a b) (if (> a b) (list b a) (list a b)))
+	; (mini_sort 2 1) -> (2 1)
+\end{lstlisting}
+
+
+\section{Задание 4}
+
+\textbf{Условие:} написать функцию, которая принимает три числа и возвращает Т только тогда, когда первое число расположено между вторым и третьим.
+
+\begin{lstlisting}
+	(defun is_middle (a b c) (cond ((and (> a b) (< a c)) T) ((and (> a c) (< a b)) T)))
+\end{lstlisting}
+
+
+\section{Задание 5}
+
+\textbf{Условие:} каков результат вычисления следующих выражений?
+
+\begin{lstlisting}
+	(and 'fee 'fie 'foe) ; FOE
+	(or Nil 'fie 'foe) ; FIE
+	(and (equal 'abc 'abc) 'yes) ; YES
+	(or 'fee 'fie 'foe) ; FEE
+	(and nil 'fie 'foe) ; Nil
+	(or (equal 'abc 'abc) 'yes) ; T
+\end{lstlisting}
+
+
+\section{Задание 6}
+
+\textbf{Условие:} написать предикат, который принимает два числа-аргумента и возвращает Т, если первое число не меньше второго.
+
+\begin{lstlisting}
+	(defun predicate (a b) (>= a b))
+	; (predicate 2 1) -> T
+\end{lstlisting}
+
+
+\section{Задание 7}
+
+\textbf{Условие:} какой из следующих двух вариантов предиката ошибочен и почему?
+\begin{lstlisting}
+	(defun pred1 (x) (and (numberp x) (plusp x))) ; Ok
+	(defun pred2 (x) (and (plusp x)(numberp x))) ; Если x не число, то функция plusp вернет ошибку <Not a number>
+\end{lstlisting}
+
+
+\section{Задание 8}
+
+\textbf{Условие:} решить задачу 4, используя для ее решения конструкции \texttt{IF, COND, AND/OR}.
+
+\begin{lstlisting}
+	; if
+	(defun between_if (a b c) (if (< b a c) (< b a c) (> b a c)))
+
+	; cond 
+	(defun between_cond (a b c) (cond ((< b a c) T) ((< c a b) T)))
+
+	; and/or
+	(defun between_andor (a b c) (or (< b a c) (< c a b))
+\end{lstlisting}
+
+
+\section{Задание 9}
+
+\textbf{Условие:} Переписать функцию how-alike, приведенную в лекции и использующую \texttt{COND}, используятолько конструкции \texttt{IF, AND/OR}.
+
+Исходная функция \texttt{how\_alike} представлена ниже.
+
+\begin{lstlisting}
+	(defun how_alike(x y)
+	(cond ((or (= x y) (equal x y)) 'the_same)
+		  ((and (oddp x) (oddp y)) 'both_odd)
+		  ((and (evenp x) (evenp y)) 'both_even)
+		  (t'difference)))
+\end{lstlisting}
+
+Функция \texttt{how\_alike} через \texttt{if} представлена ниже.
+
+\begin{lstlisting}
+	(defun how_alike(x y)
+	(if (or (= x y) (equal x y)) 'the_same
+	(if (and (oddp x) (oddp y)) 'both_odd
+	(if (and (evenp x) (evenp y)) 'both_even 'difference))))
+\end{lstlisting}
+
+Функция \texttt{how\_alike} через \texttt{and/or} представлена ниже.
+
+\begin{lstlisting}
+	(defun how_alike(x y)
+	(or (and (or (= x y) (equal x y)) 'the_same)
+		(and (and (oddp x) (oddp y)) 'both_odd)
+		(and (and (evenp x) (evenp y)) 'both_even)
+		'difference))
+\end{lstlisting}
+
+
+\chapter{Ответы на вопросы к лабораторной работе}
+
+\section{Базис Lisp.}
+
+\textbf{Базис языка} -- минимальный набор конструкций языка и структур данных, с помощью которых можно решить любую задачу.
+
+Базис состоит из:
+\begin{enumerate}
+    \item атомы и структуры (представляющиеся бинарными узлами);
+    \item базовые (несколько) функций и функционалов: встроенные примитивные функции \texttt{(atom, eq, cons, car, cdr)}; специальные функции и функционалы \texttt{(quote, cond, lambda, eval, apply, funcall)}.
+\end{enumerate}
+
+
+\section{Классификация функций.}
+
+Функции в Lisp классифицируют следующим образом:
+
+\begin{itemize}
+    \item <<чистые>> математические функции;
+    \item рекурсивные функции;
+    \item специальные функции --- формы (от вызова к вызову может меняться количество аргументов, или обрабатываться по-разному);
+    \item псевдофункции (создают эффект на внешнем устройстве);
+    \item функции с вариативными значениями, из которых выбирается 1;
+    \item функционалы (в качестве аргумента -- функцмя, или возаращает в качестве результата функцию).
+\end{itemize}
+
+По назначению функции разделяются следующим образом:
+
+\begin{enumerate}
+    \item конструкторы --- создают значение (\texttt{cons}, например);
+    \item селекторы --- получают доступ по адресу (\texttt{car}, \texttt{cdr});
+    \item предикаты --- возвращают \texttt{Nil}, \texttt{T}.
+\end{enumerate}
+
+\section{Способы создания функций.}
+
+Построить функцию можно с помощью Lambda-выражения (базисный способ)
+
+Lambda-определение безымянной функции:
+
+\begin{lstlisting}
+	(lambda <Lambda-список> <форма>),
+\end{lstlisting}
+
+где Lambda-список -- список аргументов, а форма -- тело функции.
+
+Lambda-вызов функции:
+
+\begin{lstlisting}
+	(<Lambda-выражение> <формальные параметры>)
+\end{lstlisting}
+
+Функции с именем. В таких функциях \texttt{defun} связывает символьный атом с Lambda-определением:
+
+\begin{lstlisting}
+	(defun f <Lambda-выражение>)
+\end{lstlisting}
+
+Упрощенное определение:
+
+\begin{lstlisting}
+	(defun f(x1, ..., xk) (<формы>))
+\end{lstlisting}
+
+
+\section{Работа функций Cond, if, and/or.}
+
+\texttt{cond} -- средство разветвления вычислений. Условное выражение вычисляется по следующим правилам:
+
+\begin{enumerate}
+	\item Последовательно вычсляются условия ветвей до тех пор, пока не встретится выражение-форма, значение которой отлично от Nil.
+	\item Затем вычисляется выражение соответсвующей ветви и его значение возвращается в качестве значения функции.
+	\item Если все условия имеют значение Nil, то значением условного выражения становится Nil.
+\end{enumerate}
+
+\begin{lstlisting}
+	(cond (p1 e1) (p2 e2) ... (pn en))
+\end{lstlisting}
+
+
+\texttt{if} -- макрофункция. Если значение выражения \texttt{C} отлично от \texttt{Nil}, то вычисляется выражение \texttt{E1}, иначе значение \texttt{E2}.
+
+\begin{lstlisting}
+	(if C E1 E2)
+\end{lstlisting}
+
+\texttt{or} -- функция-дизъюнкции.
+
+\begin{lstlisting}
+	(or e1 e2 ... en)
+\end{lstlisting}
+
+При  выполнении вызова последовательно  вычисляются  аргументы ei (слева направо) -- до тех пор, пока не встретится значение ei, отличное от Nil.  В этом случае  вычисление  прерывается  изначение  функции  равно значению этого ei. Если  же  вычислены значения всех  аргументов ei, и оказалось,  что они    равны Nil,  то  результирующее  значение  функции равно Nil.
+
+
+\texttt{and} -- функция-конъюнкции.
+
+\begin{lstlisting}
+	(and e1 e2 ... en)
+\end{lstlisting}
+
+При  вычислении этого  функционального обращения последовательно слева направо вычисляются аргументы функции ei -- до тех пор, пока не встретится значение, равное Nil. В этом случае вычисление прерывается и значение функции равно Nil. Если же были вычислены все значения ei и оказалось,  что все  они отличны  от Nil,  то  результирующим значением функции and будет значение последнего выражения en. 
