@@ -61,73 +61,8 @@
 	breakatwhitespace=true,				% переносить строки только если есть пробел
 	escapeinside={\#*}{*)},				% если нужно добавить комментарии в коде
 	backgroundcolor=\color{white},
-}
-
-
-\usepackage{pgfplots}
-\usetikzlibrary{datavisualization}
-\usetikzlibrary{datavisualization.formats.functions}
-
-\usepackage{graphicx}
-\newcommand{\imgScale}[3] {
-	\begin{figure}[h!]
-		\center{\includegraphics[scale=#1]{img/#2}} % height
-		\caption{#3}
-		\label{img:#2}
-	\end{figure}
-}
-
-\usepackage{graphicx}
-\newcommand{\imgHeight}[3] {
-	\begin{figure}[h!]
-		\center{\includegraphics[height=#1]{img/#2}} % height
-		\caption{#3}
-		\label{img:#2}
-	\end{figure}
-}
-
-\usepackage[justification=centering]{caption} % Настройка подписей float объектов
-
-\usepackage[unicode,pdftex]{hyperref} % Ссылки в pdf
-\hypersetup{hidelinks}
-
-\usepackage{csvsimple}
-
-\newcommand{\code}[1]{\texttt{#1}}
-
-
-\usepackage{longtable}
-
-\usepackage{array}
-\usepackage{booktabs}
-\usepackage{floatrow}
-
-\floatsetup[longtable]{LTcapwidth=table}
-
-
-\usepackage{csvsimple}
-
-
-% Листинги
-
-\usepackage{listings}
-\usepackage{wrapfig}
-% Значения по умолчанию
-\lstset{
-  basicstyle= \footnotesize,
-  breakatwhitespace=true,% разрыв строк только на whitespacce
-  breaklines=true,       % переносить длинные строки
-%   captionpos=b,          % подписи снизу -- вроде не надо
-  inputencoding=koi8-r,
-  numbers=left,          % нумерация слева
-  numberstyle=\footnotesize,
-  showspaces=false,      % показывать пробелы подчеркиваниями -- идиотизм 70-х годов
-  showstringspaces=false,
-  showtabs=false,        % и табы тоже
-  stepnumber=1,
-  tabsize=4,              % кому нужны табы по 8 символов?
-  frame=single,
-  escapeinside={(*}{*)}, %выделение
+	showspaces=false,
+	showstringspaces=false,
   literate={а}{{\selectfont\char224}}1
   {б}{{\selectfont\char225}}1
   {в}{{\selectfont\char226}}1
@@ -196,61 +131,46 @@
   {Я}{{\selectfont\char223}}1
 }
 
-% Стиль для псевдокода: строчки обычно короткие, поэтому размер шрифта побольше
-\lstdefinestyle{pseudocode}{
-  basicstyle=\small,
-  keywordstyle=\color{black}\bfseries\underbar,
-  language=Pseudocode,
-  numberstyle=\footnotesize,
-  commentstyle=\footnotesize\it
+
+\usepackage{pgfplots}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+
+\usepackage{graphicx}
+\newcommand{\imgScale}[3] {
+	\begin{figure}[h!]
+		\center{\includegraphics[scale=#1]{img/#2}} % height
+		\caption{#3}
+		\label{img:#2}
+	\end{figure}
 }
 
-% Стиль для обычного кода: маленький шрифт
-\lstdefinestyle{realcode}{
-  basicstyle=\scriptsize,
-  numberstyle=\footnotesize
+\usepackage{graphicx}
+\newcommand{\imgHeight}[3] {
+	\begin{figure}[h!]
+		\center{\includegraphics[height=#1]{img/#2}} % height
+		\caption{#3}
+		\label{img:#2}
+	\end{figure}
 }
 
-% Стиль для коротких кусков обычного кода: средний шрифт
-\lstdefinestyle{simplecode}{
-  basicstyle=\footnotesize,
-  numberstyle=\footnotesize
-}
+\usepackage[justification=centering]{caption} % Настройка подписей float объектов
 
-% Стиль для BNF
-\lstdefinestyle{grammar}{
-  basicstyle=\footnotesize,
-  numberstyle=\footnotesize,
-  stringstyle=\bfseries\ttfamily,
-  language=BNF
-}
+\usepackage[unicode,pdftex]{hyperref} % Ссылки в pdf
+\hypersetup{hidelinks}
 
-% Определим свой язык для написания псевдокодов на основе Python
-\lstdefinelanguage[]{Pseudocode}[]{Python}{
-  morekeywords={each,empty,wait,do},% ключевые слова добавлять сюда
-  morecomment=[s]{\{}{\}},% комменты {а-ля Pascal} смотрятся нагляднее
-  literate=% а сюда добавлять операторы, которые хотите отображать как мат. символы
-    {->}{\ensuremath{$\rightarrow$}~}2%
-    {<-}{\ensuremath{$\leftarrow$}~}2%
-    {:=}{\ensuremath{$\leftarrow$}~}2%
-    {<--}{\ensuremath{$\Longleftarrow$}~}2%
-}[keywords,comments]
+\usepackage{csvsimple}
 
-% Свой язык для задания грамматик в BNF
-\lstdefinelanguage[]{BNF}[]{}{
-  morekeywords={},
-  morecomment=[s]{@}{@},
-  morestring=[b]",%
-  literate=%
-    {->}{\ensuremath{$\rightarrow$}~}2%
-    {*}{\ensuremath{$^*$}~}2%
-    {+}{\ensuremath{$^+$}~}2%
-    {|}{\ensuremath{$|$}~}2%
-}[keywords,comments,strings]
-
-% Подписи к листингам на русском языке.
-\renewcommand\lstlistingname{\cyr\CYRL\cyri\cyrs\cyrt\cyri\cyrn\cyrg}
-\renewcommand\lstlistlistingname{\cyr\CYRL\cyri\cyrs\cyrt\cyri\cyrn\cyrg\cyri}
+\newcommand{\code}[1]{\texttt{#1}}
 
 
+\usepackage{longtable}
 
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{floatrow}
+
+\floatsetup[longtable]{LTcapwidth=table}
+
+
+\usepackage{csvsimple}
