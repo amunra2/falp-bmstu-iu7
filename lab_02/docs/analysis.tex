@@ -9,10 +9,11 @@
 
 \section{Задание 2}
 
-\textbf{Условие:} написать функцию, вычисляющую гипотенузу прямоугольного треугольника по заданным катетам и составить диаграмму её вычисления.
+\textbf{Условие:} написать функцию, вычисляющую гипотенузу прямоугольного треугольника по заданным катетам и составить диаграмму её высчиления.
 
 \begin{lstlisting}
-	решение
+	(defun hypotenuse (a b) (sqrt (+ (* a a) (* b b))))
+	; (HYPOTENUSE 3 4) -> 5.0
 \end{lstlisting}
 
 Диаграмма приложена к отчету.
@@ -23,7 +24,8 @@
 \textbf{Условие:} написать функцию, вычисляющую объем параллелепипеда по 3-м его сторонам, и составить диаграмму ее вычисления.
 
 \begin{lstlisting}
-	решение
+	(defun volume (a b c) (* a (* b c)))
+	; (volume 4 4 4) -> 64
 \end{lstlisting}
 
 Диаграмма приложена к отчету.
@@ -34,7 +36,27 @@
 \textbf{Условие:} каковы результаты вычисления следующих выражений? (объяснить возможную ошибку и варианты ее устранения)
 
 \begin{lstlisting}
-	решение
+	(list 'a c) ; The variable C is unbound.
+	(cons 'a (b c)) ; The variable C is unbound.
+	(cons 'a '(b c)) ; (A B C)
+	(caddy (1 2 3 4 5)) ; Undefined function: CADDY
+	(cons 'a 'b 'c) ; invalid number of arguments: 3
+	(list 'a (b c)) ; The variable C is unbound.
+	(list a '(b c)) ; The variable A is unbound.
+	(list (+ 1 '(length '(1 2 3)))) ; The value (LENGTH '(1 2 3)) is not of type NUMBER
+\end{lstlisting}
+
+Исправления ошибок представлены ниже.
+
+\begin{lstlisting}
+	(list 'a 'c) ; (A C)
+	(cons 'a '(b c)) ; (A B C)
+	(cons 'a '(b c)) ; (A B C)
+	(caddr '(1 2 3 4 5)) ; 3
+	(cons 'a 'b) ; (A B)
+	(list 'a '(b c)) ; (A (B C))
+	(list 'a '(b c)) ; (A (B C))
+	(list (+ 1 (length '(1 2 3)))) ; (4)
 \end{lstlisting}
 
 
@@ -43,7 +65,10 @@
 \textbf{Условие:} написать функцию \texttt{longer\_then} от двух списков-аргументов, которая возвращает Т, если первый аргумент имеет большую длину.
 
 \begin{lstlisting}
-	решение
+	(defun longer (a b) (cond ((> (length a) (length b)) T) (Nil)))
+	; (longer '(a b) '(a)) -> T
+	; (longer '(a) '(a)) -> Nil
+	; (longer '(a) '(a b)) -> Nil
 \end{lstlisting}
 
 
@@ -52,7 +77,22 @@
 \textbf{Условие:} каковы результаты вычисления следующих выражений?
 
 \begin{lstlisting}
-	решение
+	(cons 3 (list 5 6)) ; (3 5 6)
+
+	(list 3 'from 9 'lives (-9 3)) ; illegal function call
+	; Fix: (list 3 'from 9 'lives '(-9 3)) -> (3 FROM 9 LIVES (-9 3))
+
+	(+ (length for 2 too))(car '(21 22 23))) ; The variable FOR is unbound.
+	; Fix: (+ (length '(for 2 too))(car '(21 22 23))) ; 24
+
+	(cdr '(cons is short for ans)) ; (IS SHORT FOR ANS)
+
+	(car (list one two)) ; The variable ONE is unbound.
+	; Fix: (car (list 'one 'two)) -> ONE
+
+	(cons 3 '(list 5 6)) ; (3 LIST 5 6)
+
+	(car (list 'one 'two)) ; ONE
 \end{lstlisting}
 
 
@@ -61,19 +101,28 @@
 \textbf{Условие:} дана функция \texttt{(defun mystery (x) (list (second x) (first x)))}.Какие результаты вычисления следующих выражений? 
 
 \begin{lstlisting}
-	решение
+	(mystery (one two)) ; The variable TWO is unbound.
+	; Fix: (mystery '(one two)) -> (TWO ONE)
+	(mystery (one 'two)) ; The function COMMON-LISP-USER::ONE is undefined.
+	(mystery (last one two)) ; The variable ONE is unbound.
+	(mystery free) ; The variable FREE is unbound.
 \end{lstlisting}
 
 
 \section{Задание 8}
 
-\textbf{Условие:} написать функцию, которая переводит температуру в системе Фаренгейтатемпературу по Цельсию \texttt{(defun f-to-c (temp)...)}. 
+\textbf{Условие:} написать функцию, которая переводит температуру в системе Фаренгейта температуру по Цельсию \texttt{(defun f-to-c (temp)...)}. 
 
-Формулы: $c = \frac{5}{9} \cdot (f -- 320)$; $f= \frac{5}{9} \cdot c + 32.0$. Как бы назывался роман Р.Брэдбери "+451 по Фаренгейту" в системе по Цельсию?
+Формулы: $c = \frac{5}{9} \cdot (f -- 32.0)$; $f= \frac{9}{5} \cdot c + 32.0$. 
+
+Как бы назывался роман Р.Брэдбери <<+451 по Фаренгейту>> в системе по Цельсию?
 
 \begin{lstlisting}
-	решение
+	(defun f-to-c (temp) (* 5/9 (- temp 32.0)))
+	; (f-to-c 451) -> 232.77779
 \end{lstlisting}
+
+Роман бы назывался <<+232 по Цельсию>>.
 
 
 \section{Задание 9}
@@ -81,8 +130,41 @@
 \textbf{Условие:} Что получится при вычисления каждого из выражений?
 
 \begin{lstlisting}
-	решение
+	(list 'cons t nil) ; (CONS T NIL)
+	(eval (list 'cons t NIL)) ; (T)
+	(eval (eval (list 'cons t NIL))) ; The function COMMON-LISP:T is undefined.
+	(apply #cons ''(t NIL)) ; illegal complex number format: #CONS
+	; Fix: (apply #'cons '(t NIL)) -> (T)
+	(eval Nil) ; Nil
+	(list 'eval Nil) ; (EVAL NIL)
+	(eval (list 'eval Nil)) ; NIL
 \end{lstlisting}
+
+
+\section{Дополнительное задание 1}
+
+\textbf{Условие:} Написать функцию, вычисляющую катет по заданной гипотенузе и другому катету прямоугольного треугольника, и составить диаграмму ее вычисления.
+
+\begin{lstlisting}
+	(defun catet (b c) (sqrt (- (* c c) (* b b))))
+	; (catet 4 5) -> 3.0
+\end{lstlisting}
+
+Диаграмма приложена к отчету.
+
+
+\section{Дополнительное задание 2}
+
+\textbf{Условие:} Написать функцию, вычисляющую площадь трапеции по ее основаниям и высоте, и составить диаграмму ее вычисления.
+
+\begin{lstlisting}
+	(defun catet (b c) (sqrt (- (* c c) (* b b))))
+	; (catet 4 5) -> 3.0
+\end{lstlisting}
+
+Диаграмма приложена к отчету.
+
+
 
 
 \chapter{Ответы на вопросы к лабораторной работе}
@@ -93,28 +175,105 @@
 
 Базис состоит из:
 \begin{enumerate}
-    \item структур, атомов;
-    \item встроенных (примитивных) функций (\texttt{car}, \texttt{cdr});
-    \item специальных функций, управляющих обработкой структур, представляющих вычислимые выражения (\texttt{quote}).
+    \item атомы и структуры (представляющиеся бинарными узлами);
+    \item базовые (несколько) функций и функционалов: встроенные примитивные функции \texttt{(atom, eq, cons, car, cdr)}; специальные функции и функционалы \texttt{(quote, cond, lambda, eval, apply, funcall)}.
 \end{enumerate}
 
-\textbf{Ядро} -- основные действия, которые наиболее часто используются. Ядро шире, чем базис.
-
-% \begin{lstlisting}
-% \end{lstlisting}
 
 \section{Классификация функций.}
 
-TODO
+Функции в Lisp классифицируют следующим образом:
+
+\begin{itemize}
+    \item <<чистые>> математические функции;
+    \item рекурсивные функции;
+    \item специальные функции --- формы (от вызова к вызову может меняться количество аргументов, или обрабатываться по-разному);
+    \item псевдофункции (создают эффект на внешнем устройстве);
+    \item функции с вариативными значениями, из которых выбирается 1;
+    \item функционалы (в качестве аргумента -- функцмя, или возаращает в качестве результата функцию).
+\end{itemize}
+
+По назначению функции разделяются следующим образом:
+
+\begin{enumerate}
+    \item конструкторы --- создают значение (\texttt{cons}, например);
+    \item селекторы --- получают доступ по адресу (\texttt{car}, \texttt{cdr});
+    \item предикаты --- возвращают \texttt{Nil}, \texttt{T}.
+\end{enumerate}
 
 \section{Способы создания функций.}
 
-TODO
+Построить функцию можно с помощью Lambda-выражения (базисный способ)
+
+Lambda-определение безымянной функции:
+
+\begin{lstlisting}
+	(lambda <Lambda-список> <форма>),
+\end{lstlisting}
+
+где Lambda-список -- список аргументов, а форма -- тело функции.
+
+Lambda-вызов функции:
+
+\begin{lstlisting}
+	(<Lambda-выражение> <формальные параметры>)
+\end{lstlisting}
+
+Функции с именем. В таких функциях \texttt{defun} связывает символьный атом с Lambda-определением:
+
+\begin{lstlisting}
+	(defun f <Lambda-выражение>)
+\end{lstlisting}
+
+Упрощенное определение:
+
+\begin{lstlisting}
+	(defun f(x1, ..., xk) (<формы>))
+\end{lstlisting}
+
 
 \section{Функции CAR, CDR.}
 
-TODO
+\texttt{car} -- функция получения первого элемента точечной пары, \texttt{cdr} -- функция получения второго элемента точечной пары.
+
+Примеры:
+
+\begin{center}
+    \begin{tabular}{ |c|c|c| } 
+        \hline
+            S-выражение & Результат выполнения \texttt{car} & Результат выполнения \texttt{cdr} \\ 
+        \hline
+        \hline
+            (A . B) & A & B \\ 
+        \hline
+            ((A . B) . C) & (A . B) & C \\ 
+		\hline
+			(A . (B . C)) & A & (B . C) \\ 
+        \hline
+    \end{tabular}
+\end{center}
+
 
 \section{Назначение и отличие в работе Cons и List.}
 
-TODO
+\texttt{cons} -- имеет фиксированное количество аргументов (два). 
+В случае, когда аргументами являются атомы создает точечную пару. В случает, когда первый аргумент атом а второй список, атом становится головой, а второй аргумент (список) становится хвостом. 
+
+\begin{lstlisting}[language=Lisp]
+(cons 'a 'b) 	   ; (A . B)
+(cons 'a '(b c d)) ; (A B C D)
+(cons 'a 'b 'c)    ; Error (invalid number of arguments: 3)
+\end{lstlisting}
+
+\imgHeight{40mm}{memory_para}{Результат работы (cons(A B))}
+
+
+\texttt{list} -- не имеет фиксированное количество аргументов. 
+Создает список, у которого голова - это первый аргумент, хвост - все остальные аргументы.
+
+\begin{lstlisting}[language=Lisp]
+(list 'a 'b)    ; (A B)
+(cons 'a 'b 'c) ; (A B C)
+\end{lstlisting}
+
+\imgHeight{40mm}{memory_list}{Результат работы (list(A B))}
