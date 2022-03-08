@@ -13,6 +13,7 @@
 (defun roll_dice() 
     (+ (random 6) 1)
 )
+
 (defun roll_dices() 
     (list (roll_dice) (roll_dice))
 )
@@ -39,7 +40,7 @@
 
 
 (defun print_info (player dice) 
-    (format Nil "Player: ~a, points = ~a, sum =  ~a" player dice (sum_points dice))
+    (format T "~%Player: ~a, points = ~a, sum =  ~a" player dice (sum_points dice))
 )
 
 
@@ -52,12 +53,15 @@
 )
 
 
+
 (defun start_game()
     (setf dice1 (player_move player1))
     (if (is_player_won dice1) (print_res player1 dice1)
-        (and (setf dice2 (player_move player2))
-        (cond ((is_player_won dice2) (print_res player2 dice2))
-              ((> (sum_points (car dice1)) (sum_points (car dice2))) (print_res player1 dice1))
-              ((< (sum_points (car dice1)) (sum_points (car dice2))) (print_res player2 dice2)) 
-              ((format Nil "Draw")) )))
+    (and (setf dice2 (player_move player2))
+    (cond ((is_player_won dice2) (print_res player2 dice2))
+            ((> (sum_points (car dice1)) (sum_points (car dice2))) (print_res player1 dice1))
+            ((< (sum_points (car dice1)) (sum_points (car dice2))) (print_res player2 dice2)) 
+            ((format Nil "Draw")) )))
 )
+
+(start_game)
