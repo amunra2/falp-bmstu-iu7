@@ -1,0 +1,248 @@
+\chapter{Практические задания}
+
+\section{Задание 1}
+
+\textbf{Условие:} написать функцию, которая по своему списку-аргументу \texttt{lst} определяет является ли он палиндромом (то есть равны ли \texttt{lst} и \texttt{(reverse lst)})
+
+\begin{lstlisting}
+(defun remove_last (lst)
+    (reverse (cdr (reverse lst)))
+)
+
+
+(defun is_equal_first(lst1 lst2)
+    (if (eq (first lst1) (first lst2)) T Nil)
+)
+
+
+(defun palindrom (lst) 
+    (cond ((eq (cdr lst) Nil) T)
+        ((is_equal_first lst (reverse lst)) (palindrom (remove_last (cdr lst))))
+        (T Nil)
+    )
+)    
+\end{lstlisting}
+
+
+\section{Задание 2}
+
+\textbf{Условие:} написать предикат set-equal, который возвращает t, если два его множества-аргумента содержат одни и те же элементы, порядок которых не имеет значения.
+
+\begin{lstlisting}
+(defun set_equal (lst1 lst2)
+    (cond ((and (null lst1) (null lst2)) T)
+        ((or (null lst1) (null lst2)) Nil)
+        (T (set_equal (remove (car lst1) lst1) (remove (car lst1) lst2)))
+    )
+)
+\end{lstlisting}
+
+
+\section{Задание 3}
+
+\textbf{Условие:} напишите свои необходимые функции, которые обрабатывают таблицу из 4-х точечных пар: (страна . столица), и возвращают по стране - столицу, а по столице — страну.
+
+
+\begin{lstlisting}
+(defvar table 
+    (list (cons "Country1" "Capital1")
+        (cons "Country2" "Capital2")
+        (cons "Country3" "Capital3")
+        (cons "Country4" "Capital4")
+    )
+)
+
+
+(defun get_capital (table country)
+    (cond ((null table) Nil)
+        ((equal (caar table) country) (cdar table))
+        (T (get_capital (cdr table) country))
+    )
+)
+
+
+(defun get_country (table capital)
+    (cond ((null table) Nil)
+        ((equal (cdar table) capital) (caar table))
+        (T (get_country (cdr table) capital))
+    )
+)
+\end{lstlisting}
+
+
+
+
+\section{Задание 4}
+
+\textbf{Условие:} напишите функцию \texttt{swap-first-last}, которая переставляет в списке-аргументе первый и последний элементы.
+
+\begin{lstlisting}
+
+(defun remove_last (lst)
+    (reverse (cdr (reverse lst)))
+)
+
+(defun swap_first_last (lst)
+    (cons (first (reverse lst)) (append (cdr (remove_last lst)) (list (first lst))))
+)
+    
+\end{lstlisting}
+
+
+\section{Задание 5}
+
+\textbf{Условие:} напишите функцию \texttt{swap-two-ellement}, которая переставляет в списке-аргументе два указанных своими порядковыми номерами элемента в этом списке.
+
+
+\begin{lstlisting}
+(defun my_replace (lst pos elem)
+    (setf (nth pos lst) elem)
+    lst
+)
+
+
+(defun swap_two_element (lst pos1 pos2)
+    (let ((tmp (nth pos1 lst)))
+         (my_replace lst pos1 (nth pos2 lst))
+         (my_replace lst pos2 tmp))
+)
+\end{lstlisting}
+
+
+\section{Задание 6}
+
+\textbf{Условие:} напишите две функции, \texttt{swap-to-left} и \texttt{swap-to-right}, которые производят одну круговую перестановку в списке-аргументе влево и вправо, соответственно.
+
+\begin{lstlisting}
+(defun remove_last (lst)
+    (reverse (cdr (reverse lst)))
+)
+
+(defun swap_to_left (lst)
+    (append (cdr lst) (list (first lst)))
+)
+
+
+(defun swap_to_right (lst)
+    (append (list (first (reverse lst))) (remove_last lst))
+)  
+\end{lstlisting}
+
+
+\section{Задание 7}
+
+\textbf{Условие:} напишите функцию, которая добавляет к множеству двухэлементных списков новый двухэлементный список, если его там нет.
+
+\begin{lstlisting}
+(defun is_exist (lst elem)
+    (cond ((null lst) Nil)
+          ((and (= (caar lst) (car elem)) (= (cadar lst) (cadr elem))) T)
+          (T (is_exist (cdr lst) elem))
+    )
+)
+
+(defun add_elem (lst elem)
+    (if (is_exist lst elem) lst (append lst (list elem)))
+)   
+\end{lstlisting}
+
+
+\section{Задание 8}
+
+\textbf{Условие:} напишите функцию, которая умножает на заданное число-аргумент первый числовой элемент списка из заданного 3-х элементного списка-аргумента, когдa все элементы списка --- числа; элементы списка -- любые объекты.
+
+
+\begin{lstlisting}
+; a)
+(defun mul_first (num lst)
+    (cond ((null lst) nil)
+            ((numberp (car lst)) (setf (car lst) (* (car lst) num)))
+            (T (mul_first num (cdr lst)))
+    )
+    lst
+)
+
+; б)
+(defun mul_first (num lst)
+    (cond ((null lst) Nil)
+            ((symbolp (car lst)) (cons (car lst) (f (cdr lst) num)))
+            ((listp (car lst)) (cons (f (car lst) num) (f (cdr lst) num)))
+            (T (cons (* num (car lst)) (f (cdr lst) num))) 
+    )
+)   
+\end{lstlisting}
+
+
+\section{Задание 9}
+
+\textbf{Условие:} напишите функцию, \texttt{select-between}, которая из списка-аргумента из 5 чисел выбирает только те, которые расположены между двумя указанными границами-аргументами и возвращает их в виде списка (упорядоченного по возрастанию списка чисел (+ 2 балла)).
+
+\begin{lstlisting}
+    
+(defun check_border (num a b)
+    (and (> num a) (< num b))
+)
+
+
+(defun select_between_rec (lst border_1 border_2 res_lst)
+    (let ((elem (car lst)))
+         (cond ((null lst) res_lst)
+               ((check_border elem border_1 border_2) 
+                (select_between_rec (cdr lst) border_1 border_2 
+                  (append res_lst (list elem))))
+               (T (select_between_rec (cdr lst) border_1 border_2 res_lst))
+         )
+    )
+)
+
+
+(defun select_between (lst border_1 border_2)
+    (let ((res_lst ()))
+         (select_between_rec lst border_1 border_2 res_lst)
+    )
+)  
+\end{lstlisting}
+
+
+
+
+\chapter{Ответы на вопросы к лабораторной работе}
+
+\section{Структуроразрушающие и не разрушающие структуру списка функции}
+
+\textbf{Не разрушающие структуру списка функции} -- функции, которые не меняют объект-аргумент, а создают копию.
+
+\begin{itemize}
+    \item \texttt{length} -- возврат длины списка по верхнему уровню;
+    \item \texttt{remove} -- удаляет элемент по значению (использует \texttt{eql}, но можно передать другую функцию через специальный параметр: \texttt{:test 'equal});
+    \item \texttt{append} -- объединяет списки. Это форма, можно передать больше двух аргументов. Создает копию для всех аргументов, кроме последнего;
+    \item \texttt{reverse} -- возвращает копию исходного списка, элементы которого переставленыв обратном порядке (только верхний уровень);
+    \item \texttt{last} -- проход по верхнему уровню и возврат последней списковой ячейки;
+    \item \texttt{nth} -- возврат указателя от n-ой списковой ячейки, нумерация с нуля.;
+    \item \texttt{nthcdr} -- возврат n-го хвоста;
+    \item \texttt{member} -- присутсвует ли эелмент в списке. Возвращает остаток списка, начиная с \texttt{car} указателя списковой ячейки;
+    \item \texttt{subst} -- заменяет все элементы списка, которые равны второму переданному элементу-аргументу на другой первый элемент-аргумент (по умолчанию для сравнения используется функция \texttt{eql}).
+\end{itemize}
+
+
+\textbf{Структуроразрушающие функции} -- функции изменяют сам объект, при этом возврат к исходному невозможен.
+
+
+\begin{itemize}
+    \item \texttt{nconc} -- аналогично \texttt{append}, но не делает коипю, а разрушает структуру;
+    \item \texttt{nsubst} -- аналогично \texttt{subst}, но не создает копию;
+    \item \texttt{nreverse} -- аналогично \texttt{reverse}, но не создает копию.
+\end{itemize}
+
+
+\section{Отличие в работе функций cons, list, append, nconc и в их результате}
+
+\texttt{cons} -- имеет фиксированное количество аргументов (два). 
+В случае, когда аргументами являются атомы создает точечную пару. В случает, когда первый аргумент атом а второй список, атом становится головой, а второй аргумент (список) становится хвостом. 
+
+\texttt{list} -- не имеет фиксированное количество аргументов. 
+Создает список, у которого голова - это первый аргумент, хвост - все остальные аргументы.
+
+\texttt{append} -- форма, принимает на вход произвольное количество аргументов и для всех аргументов, кроме последнего, создает копию, ссылая при этом последний элемент каждого списка-аргумента на первый элемент следующего по порядку списка-аргумента.
+
+\texttt{nconc} -- аналогично \texttt{append}, но не создает копию (разрушает структуру списка).
