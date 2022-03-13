@@ -5,22 +5,21 @@
 \textbf{Условие:} написать функцию, которая по своему списку-аргументу \texttt{lst} определяет является ли он палиндромом (то есть равны ли \texttt{lst} и \texttt{(reverse lst)})
 
 \begin{lstlisting}
-(defun remove_last (lst)
-    (reverse (cdr (reverse lst)))
-)
-
-
-(defun is_equal_first(lst1 lst2)
-    (if (eq (first lst1) (first lst2)) T Nil)
-)
-
-
-(defun palindrom (lst) 
-    (cond ((eq (cdr lst) Nil) T)
-        ((is_equal_first lst (reverse lst)) (palindrom (remove_last (cdr lst))))
-        (T Nil)
+(defun my-append (lst1 lst2)
+    (cond ((null lst1) lst2)
+          (T (cons (car lst1) (my-append (cdr lst1) lst2)))
     )
-)    
+)
+
+(defun my-reverse (lst)
+    (cond ((null lst) Nil)
+          (T (my-append (my-reverse (cdr lst)) (list (car lst))))
+    )
+)
+
+(defun palindrom (lst)
+    (equal lst (my-reverse lst))
+)
 \end{lstlisting}
 
 
@@ -29,10 +28,17 @@
 \textbf{Условие:} написать предикат set-equal, который возвращает t, если два его множества-аргумента содержат одни и те же элементы, порядок которых не имеет значения.
 
 \begin{lstlisting}
-(defun set_equal (lst1 lst2)
+(defun my-remove (elem lst)
+    (cond ((null lst) Nil)
+          ((equal (car lst) elem) (my-remove elem (cdr lst)))
+          (T (cons (car lst) (my-remove elem (cdr lst))))
+    )
+)
+
+
+(defun set-equal (lst1 lst2)
     (cond ((and (null lst1) (null lst2)) T)
-        ((or (null lst1) (null lst2)) Nil)
-        (T (set_equal (remove (car lst1) lst1) (remove (car lst1) lst2)))
+          (T (set-equal (my-remove (car lst1) lst1) (my-remove (car lst1) lst2)))
     )
 )
 \end{lstlisting}
@@ -53,18 +59,18 @@
 )
 
 
-(defun get_capital (table country)
+(defun get-capital (table country)
     (cond ((null table) Nil)
         ((equal (caar table) country) (cdar table))
-        (T (get_capital (cdr table) country))
+        (T (get-capital (cdr table) country))
     )
 )
 
 
-(defun get_country (table capital)
+(defun get-country (table capital)
     (cond ((null table) Nil)
         ((equal (cdar table) capital) (caar table))
-        (T (get_country (cdr table) capital))
+        (T (get-country (cdr table) capital))
     )
 )
 \end{lstlisting}
@@ -77,13 +83,24 @@
 \textbf{Условие:} напишите функцию \texttt{swap-first-last}, которая переставляет в списке-аргументе первый и последний элементы.
 
 \begin{lstlisting}
-
-(defun remove_last (lst)
-    (reverse (cdr (reverse lst)))
+(defun my-append (lst1 lst2)
+    (cond ((null lst1) lst2)
+          (T (cons (car lst1) (my-append (cdr lst1) lst2)))
+    )
 )
 
-(defun swap_first_last (lst)
-    (cons (first (reverse lst)) (append (cdr (remove_last lst)) (list (first lst))))
+(defun my-reverse (lst)
+    (cond ((null lst) Nil)
+          (T (my-append (my-reverse (cdr lst)) (list (car lst))))
+    )
+)
+
+(defun remove-last (lst)
+    (my-reverse (cdr (my-reverse lst)))
+)
+
+(defun swap-first-last (lst)
+    (cons (car (my-reverse lst)) (my-append (cdr (remove-last lst)) (list (car lst))))
 )
     
 \end{lstlisting}
@@ -95,16 +112,44 @@
 
 
 \begin{lstlisting}
-(defun my_replace (lst pos elem)
-    (setf (nth pos lst) elem)
-    lst
+    (defun my-length-rec (lst n)
+    (cond ((null lst) n)
+          (T (my-length-rec (cdr lst) (+ n 1)))
+    )
 )
 
 
-(defun swap_two_element (lst pos1 pos2)
-    (let ((tmp (nth pos1 lst)))
-         (my_replace lst pos1 (nth pos2 lst))
-         (my_replace lst pos2 tmp))
+(defun my-length (lst)
+    (my-length-rec lst 0)
+)
+
+
+(defun find-by-index-rec (lst ind cur-ind)
+    (cond ((null lst) Nil)
+          ((= ind cur-ind) (car lst))
+          (T (find-by-index-rec (cdr lst) ind (+ cur-ind 1)))
+    )
+)
+
+
+(defun find-by-index (lst ind)
+    (find-by-index-rec lst ind 0)
+)
+
+
+(defun swap-two-elements-rec (lst ind1 ind2 src-list res cur-ind)
+    (cond ((null lst) (reverse res))
+          ((= cur-ind ind1) (swap-two-elements-rec (cdr lst) ind1 ind2 src-list (cons (find-by-index src-list ind2) res) (+ cur-ind 1)))
+          ((= cur-ind ind2) (swap-two-elements-rec (cdr lst) ind1 ind2 src-list (cons (find-by-index src-list ind1) res) (+ cur-ind 1)))
+          (T (swap-two-elements-rec (cdr lst) ind1 ind2 src-list (cons (car lst) res) (+ cur-ind 1)))    
+    )
+)
+
+
+(defun swap-two-elements (lst ind1 ind2)
+    (cond ((= ind1 ind2) lst)
+          (T (swap-two-elements-rec lst ind1 ind2 lst () 0))
+    )
 )
 \end{lstlisting}
 
@@ -114,18 +159,29 @@
 \textbf{Условие:} напишите две функции, \texttt{swap-to-left} и \texttt{swap-to-right}, которые производят одну круговую перестановку в списке-аргументе влево и вправо, соответственно.
 
 \begin{lstlisting}
-(defun remove_last (lst)
-    (reverse (cdr (reverse lst)))
+(defun my-append (lst1 lst2)
+    (cond ((null lst1) lst2)
+          (T (cons (car lst1) (my-append (cdr lst1) lst2)))
+    )
 )
 
-(defun swap_to_left (lst)
-    (append (cdr lst) (list (first lst)))
+(defun my-reverse (lst)
+    (cond ((null lst) Nil)
+          (T (my-append (my-reverse (cdr lst)) (list (car lst))))
+    )
 )
 
+(defun remove-last (lst)
+    (my-reverse (cdr (my-reverse lst)))
+)
 
-(defun swap_to_right (lst)
-    (append (list (first (reverse lst))) (remove_last lst))
-)  
+(defun swap-to-left (lst)
+    (my-append (cdr lst) (list (car lst)))
+)
+
+(defun swap-to-right (lst)
+    (my-append (list (car (my-reverse lst))) (remove-last lst))
+)
 \end{lstlisting}
 
 
@@ -134,16 +190,22 @@
 \textbf{Условие:} напишите функцию, которая добавляет к множеству двухэлементных списков новый двухэлементный список, если его там нет.
 
 \begin{lstlisting}
-(defun is_exist (lst elem)
-    (cond ((null lst) Nil)
-          ((and (= (caar lst) (car elem)) (= (cadar lst) (cadr elem))) T)
-          (T (is_exist (cdr lst) elem))
+(defun my-append (lst1 lst2)
+    (cond ((null lst1) lst2)
+          (T (cons (car lst1) (my-append (cdr lst1) lst2)))
     )
 )
 
-(defun add_elem (lst elem)
-    (if (is_exist lst elem) lst (append lst (list elem)))
-)   
+(defun is-exist (lst elem)
+    (cond ((null lst) Nil)
+          ((equal (car lst) elem) T)
+          (T (is-exist (cdr lst) elem))
+    )
+)
+
+(defun add-elem-if-exist (lst elem)
+    (if (is-exist lst elem) lst (my-append lst (list elem)))
+)
 \end{lstlisting}
 
 
@@ -154,22 +216,22 @@
 
 \begin{lstlisting}
 ; a)
-(defun mul_first (num lst)
+(defun mul-first (num lst)
     (cond ((null lst) nil)
             ((numberp (car lst)) (setf (car lst) (* (car lst) num)))
-            (T (mul_first num (cdr lst)))
+            (T (mul-first num (cdr lst)))
     )
     lst
 )
 
 ; б)
-(defun mul_first (num lst)
+(defun mul-first (num lst)
     (cond ((null lst) Nil)
             ((symbolp (car lst)) (cons (car lst) (f (cdr lst) num)))
             ((listp (car lst)) (cons (f (car lst) num) (f (cdr lst) num)))
             (T (cons (* num (car lst)) (f (cdr lst) num))) 
     )
-)   
+)
 \end{lstlisting}
 
 
@@ -178,29 +240,27 @@
 \textbf{Условие:} напишите функцию, \texttt{select-between}, которая из списка-аргумента из 5 чисел выбирает только те, которые расположены между двумя указанными границами-аргументами и возвращает их в виде списка (упорядоченного по возрастанию списка чисел (+ 2 балла)).
 
 \begin{lstlisting}
-    
-(defun check_border (num a b)
-    (and (> num a) (< num b))
+(defun check-border (num a b)
+    (or (> a num b) (< a num b))
 )
 
 
-(defun select_between_rec (lst border_1 border_2 res_lst)
+(defun select-between-rec (lst border_1 border_2 res_lst)
     (let ((elem (car lst)))
          (cond ((null lst) res_lst)
-               ((check_border elem border_1 border_2) 
-                (select_between_rec (cdr lst) border_1 border_2 
+               ((check-border elem border_1 border_2) 
+                (select-between-rec (cdr lst) border_1 border_2 
                   (append res_lst (list elem))))
-               (T (select_between_rec (cdr lst) border_1 border_2 res_lst))
+               (T (select-between-rec (cdr lst) border_1 border_2 res_lst))
          )
     )
 )
 
-
-(defun select_between (lst border_1 border_2)
+(defun select-between (lst border_1 border_2)
     (let ((res_lst ()))
-         (select_between_rec lst border_1 border_2 res_lst)
+         (select-between-rec lst border_1 border_2 res_lst)
     )
-)  
+)
 \end{lstlisting}
 
 
