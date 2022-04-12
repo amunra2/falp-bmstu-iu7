@@ -1,0 +1,148 @@
+\chapter{Практические задания}
+
+\section{Задание 1}
+
+\textbf{Условие:} напишите функцию, которая уменьшает на 10 все числа из списка-аргумента этой функции.
+
+\begin{lstlisting}
+(defun minus10 (lst)
+    (mapcar #'(lambda (elem) (cond ((numberp elem) (- elem 10))
+                                   ((listp elem) (minus10 elem)) 
+                                   (T elem))
+                             ) lst)
+)
+\end{lstlisting}
+
+
+\section{Задание 2}
+
+\textbf{Условие:} напишите функцию, которая умножает на заданное число-аргумент все числа из заданного списка-аргумента, когда
+\begin{itemize}
+    \item все элементы списка --- числа;
+    \item элементы списка -- любые объекты.
+\end{itemize}
+
+
+\begin{lstlisting}
+; а)
+(defun mul-num (lst num)
+    (mapcar #'(lambda (elem) (* elem num)) lst)
+)
+
+; б)
+(defun mul-num (lst num)
+    (mapcar #'(lambda (elem) (cond ((numberp elem) (* elem num))
+                                   ((listp elem) (mul-num elem num))
+                                   (T elem)
+                             )
+              ) lst
+    )
+)
+\end{lstlisting}
+
+
+\section{Задание 3}
+
+\textbf{Условие:} написать функцию, которая по своему списку-аргументу \texttt{lst} определяет, является ли он палиндромом (то есть равны ли \texttt{lst} и \texttt{(reverse lst)}).
+
+
+
+\begin{lstlisting}
+(defun palindrom-func (lst rev_lst)
+    (mapcar #'(lambda (elem1 elem2) (equal elem1 elem2)) lst rev_lst)
+)
+
+
+(defun palindrom (lst)
+    (reduce #'(lambda (elem1 elem2) (and elem1 elem2)) 
+                            (palindrom-func lst (reverse lst)))
+)
+\end{lstlisting}
+
+
+\section{Задание 4}
+
+\textbf{Условие:} написать предикат \texttt{set-equal}, который возвращает \texttt{t}, если два его множества-аргумента содержат одни и те же элементы, порядок которых не имеет значения.
+
+\begin{lstlisting}
+(defun my-subsetp (set1 set2)
+    (reduce #'(lambda (prev_res1 elem1)
+                (and prev_res1 (reduce #'(lambda (prev_res2 elem2)
+                    (or prev_res2 (equal elem1 elem2))
+                ) set2 :initial-value Nil))
+            ) set1 :initial-value T)
+)
+
+(defun set-equal (lst1 lst2)
+    (and (my-subsetp lst1 lst2) (my-subsetp lst2 lst1))
+)
+\end{lstlisting}
+
+
+\section{Задание 5}
+
+\textbf{Условие:} написать функцию, которая получает как аргумент список чисел, а возвращает список квадратов этих чисел в том же порядке.
+
+\begin{lstlisting}
+(defun quad (lst)
+    (mapcar #'(lambda (elem) (* elem elem)) lst)
+)
+\end{lstlisting}
+
+
+\section{Задание 6}
+
+\textbf{Условие:} напишите функцию, \texttt{select-between}, которая из списка-аргумента из 5 чисел выбирает только те, которые расположены между двумя указанными границами-аргументами и возвращает их в виде списка (упорядоченного по возрастанию списка чисел (+ 2 балла)).
+
+\begin{lstlisting}
+(defun select-between (lst a b)
+    (remove-if #'(lambda (elem) (not (or (> a elem b) (< a elem b)))) lst)
+)
+\end{lstlisting}
+
+
+\section{Задание 7}
+
+\textbf{Условие:} написать функцию, вычисляющую декартово произведение двух своих списков-аргументов.
+
+\begin{lstlisting}
+(defun decart (lst1 lst2)
+    (mapcan #'(lambda (elem1) (
+        mapcar #'(lambda (elem2) (list elem1 elem2)) lst2
+    )) lst1)
+)
+\end{lstlisting}
+
+
+\section{Задание 8}
+
+\textbf{Условие:} почему так реализовано \texttt{reduce}, в чем причина?
+
+Все дело в параметре \texttt{initial-value}, который указывается, а затем применяется функция. По умолчанию, для операции сложения этот параметр равен 0, а для опрации умножения -- 1. 
+Поэтому:
+\begin{verbatim}
+    (reduce #'+ ()) ; -> 0
+\end{verbatim}
+
+Случай ниже выдаст ошибку:
+\begin{verbatim}
+    (reduce #'+ 0)   ; -> Error
+\end{verbatim}
+
+Ошибка:
+\texttt{The value 0 is not of type SEQUENCE}
+
+
+\section{Задание 9}
+
+\textbf{Условие:} пусть \texttt{list-of-list} список, состоящий из списков. Написать функцию, которая вычисляет сумму длин всех элементов \texttt{list-of-list}, т.е. например для аргумента \texttt{((1 2) (3 4)) -> 4}.
+
+
+\begin{lstlisting}
+(defun deep-length (lst)
+    (reduce '+ (mapcar #'(lambda (elem) 
+                            (cond ((listp elem) (deep-length elem))
+                                  (T 1)
+    )) lst))
+)
+\end{lstlisting}
